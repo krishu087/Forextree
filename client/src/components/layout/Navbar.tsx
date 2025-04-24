@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Menu, X, BookOpen, ChevronDown } from "lucide-react";
+import ThemeToggle from '@/components/ThemeToggle';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -9,8 +10,8 @@ const Navbar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   return (
-    <nav className="bg-gradient-to-r from-[#2d1f3f] to-[#121212] text-white sticky top-0 z-50 shadow-lg px-4 py-2">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex items-center justify-between rounded-xl backdrop-blur-sm bg-black/30 border border-white/10">
+    <nav className="theme-nav text-foreground sticky top-0 z-50 shadow-lg px-4 py-2">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex items-center justify-between rounded-xl backdrop-blur-sm glass-card">
         <div className="flex items-center gap-3">
           <Link href="/">
             <a className="flex items-center gap-3">
@@ -69,6 +70,9 @@ const Navbar = () => {
         </div>
 
         <div className="hidden md:flex items-center gap-3">
+          <div className="mr-2">
+            <ThemeToggle />
+          </div>
           <Button variant="outline" size="default" asChild>
             <Link href="/signup">Sign Up</Link>
           </Button>

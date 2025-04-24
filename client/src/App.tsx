@@ -9,6 +9,9 @@ import Calculator from "@/pages/calculator";
 import Comparison from "@/pages/comparison";
 import News from "@/pages/news";
 import Signup from "@/pages/signup";
+import About from "@/pages/about";
+import Contact from "@/pages/contact";
+import Tutorials from "@/pages/tutorials";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 
@@ -23,6 +26,9 @@ function Router() {
           <Route path="/comparison" component={Comparison} />
           <Route path="/news" component={News} />
           <Route path="/signup" component={Signup} />
+          <Route path="/about" component={About} />
+          <Route path="/contact" component={Contact} />
+          <Route path="/tutorials" component={Tutorials} />
           <Route component={NotFound} />
         </Switch>
       </main>
