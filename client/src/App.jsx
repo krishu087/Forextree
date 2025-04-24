@@ -12,8 +12,8 @@ import Signup from "@/pages/signup";
 import About from "@/pages/about";
 import Contact from "@/pages/contact";
 import Tutorials from "@/pages/tutorials";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
+import Navbar from "./components/layout/Navbar";
+import Footer from "./components/layout/Footer";
 
 function Router() {
   return (
