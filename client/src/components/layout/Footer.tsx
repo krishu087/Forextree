@@ -67,7 +67,7 @@ const Footer = () => {
         
         <div className="border-t border-white/10 mt-16 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-gray-500 text-sm order-2 md:order-1 mt-4 md:mt-0">
-            © 2023 ForexPro. All rights reserved.
+            © 2023 ForexTree. All rights reserved.
           </p>
           <div className="flex space-x-6 order-1 md:order-2">
             <FooterLinkSmall href="#">Privacy Policy</FooterLinkSmall>

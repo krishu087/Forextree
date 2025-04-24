@@ -19,7 +19,7 @@ const Navbar = () => {
                 <BookOpen className="h-7 w-7 text-black" />
               </div>
               <span className="text-2xl font-bold tracking-tight gradient-text">
-                ForexPro
+                ForexTree
               </span>
             </div>
           </Link>

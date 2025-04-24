@@ -63,7 +63,7 @@ export default function Contact() {
                   <div className="w-10 h-10 rounded-full bg-yellow-400/20 flex items-center justify-center mr-4 group-hover:bg-yellow-400/30 transition-colors duration-300">
                     <Mail className="w-5 h-5 text-yellow-400" />
                   </div>
-                  <span className="group-hover:text-yellow-400/80 transition-colors duration-300">support@forexpro.com</span>
+                  <span className="group-hover:text-yellow-400/80 transition-colors duration-300">support@forextree.com</span>
                 </div>
 
                 <div className="flex items-center text-white/80 group">
