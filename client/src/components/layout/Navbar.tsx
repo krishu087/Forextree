@@ -29,16 +29,16 @@ const Navbar = () => {
             Home
           </NavLink>
           
-          <NavLink href="/calculator" active={location === "/calculator"}>
-            Pip Calculator
+          <NavLink href="/about" active={location === "/about"}>
+            About
           </NavLink>
           
           <NavLink href="/comparison" active={location === "/comparison"}>
             Prop Firms
           </NavLink>
           
-          <NavLink href="/news" active={location === "/news"}>
-            News
+          <NavLink href="/contact" active={location === "/contact"}>
+            Contact
           </NavLink>
           
           <div className="relative group">
@@ -53,15 +53,16 @@ const Navbar = () => {
             </button>
             {dropdownOpen && (
               <div className="absolute top-full left-0 flex flex-col bg-[#1E1E1E]/90 backdrop-blur-sm text-white rounded-md shadow-lg w-48 z-50 border border-[#333]/50 animate-fade-in">
-                <button className="px-4 py-3 hover:bg-[#333]/50 text-left rounded-t-md">
-                  Case Studies
-                </button>
-                <button className="px-4 py-3 hover:bg-[#333]/50 text-left">
-                  Tutorials
-                </button>
-                <button className="px-4 py-3 hover:bg-[#333]/50 text-left rounded-b-md">
-                  Tools
-                </button>
+                <Link href="/tutorials">
+                  <a className="px-4 py-3 hover:bg-[#333]/50 text-left rounded-t-md">
+                    Tutorials
+                  </a>
+                </Link>
+                <Link href="/calculator">
+                  <a className="px-4 py-3 hover:bg-[#333]/50 text-left rounded-b-md">
+                    Tools
+                  </a>
+                </Link>
               </div>
             )}
           </div>
@@ -97,17 +98,20 @@ const Navbar = () => {
             <MobileNavLink href="/" active={location === "/"} onClick={() => setIsOpen(false)}>
               Home
             </MobileNavLink>
-            <MobileNavLink href="/calculator" active={location === "/calculator"} onClick={() => setIsOpen(false)}>
-              Pip Calculator
+            <MobileNavLink href="/about" active={location === "/about"} onClick={() => setIsOpen(false)}>
+              About
             </MobileNavLink>
             <MobileNavLink href="/comparison" active={location === "/comparison"} onClick={() => setIsOpen(false)}>
               Prop Firms
             </MobileNavLink>
-            <MobileNavLink href="/news" active={location === "/news"} onClick={() => setIsOpen(false)}>
-              News
+            <MobileNavLink href="/contact" active={location === "/contact"} onClick={() => setIsOpen(false)}>
+              Contact
             </MobileNavLink>
-            <MobileNavLink href="#" active={false} onClick={() => setIsOpen(false)}>
-              Resources
+            <MobileNavLink href="/calculator" active={location === "/calculator"} onClick={() => setIsOpen(false)}>
+              Tools
+            </MobileNavLink>
+            <MobileNavLink href="/tutorials" active={location === "/tutorials"} onClick={() => setIsOpen(false)}>
+              Tutorials
             </MobileNavLink>
             
             <div className="pt-4 flex gap-4 border-t border-white/10">
