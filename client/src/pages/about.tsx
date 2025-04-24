@@ -21,7 +21,7 @@ export default function About() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#1a1625] bg-gradient-to-br from-[#2d1f3f] via-[#1a1625] to-[#2d1f3f]">
+    <div className="min-h-screen hero-gradient">
       <section className="py-16 px-6">
         <div className="max-w-6xl mx-auto">
           <motion.div 

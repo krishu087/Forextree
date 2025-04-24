@@ -45,22 +45,22 @@ const Navbar = () => {
           <div className="relative group">
             <button 
               className={`text-lg font-medium group flex items-center gap-1 ${
-                dropdownOpen ? 'text-yellow-400' : 'text-white hover:text-yellow-400'
-              } transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-yellow-400/50 rounded-md px-2 py-1`}
+                dropdownOpen ? 'text-primary' : 'hover:text-primary'
+              } transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-primary/50 rounded-md px-2 py-1`}
               onClick={() => setDropdownOpen(!dropdownOpen)}
             >
               Resources
               <ChevronDown className={`h-4 w-4 transition-transform duration-300 ${dropdownOpen ? 'rotate-180' : ''}`} />
             </button>
             {dropdownOpen && (
-              <div className="absolute top-full left-0 flex flex-col bg-[#1E1E1E]/90 backdrop-blur-sm text-white rounded-md shadow-lg w-48 z-50 border border-[#333]/50 animate-fade-in">
+              <div className="absolute top-full left-0 flex flex-col glass-card text-foreground rounded-md shadow-lg w-48 z-50 animate-fade-in">
                 <Link href="/tutorials">
-                  <a className="px-4 py-3 hover:bg-[#333]/50 text-left rounded-t-md">
+                  <a className="px-4 py-3 hover:bg-foreground/5 text-left rounded-t-md">
                     Tutorials
                   </a>
                 </Link>
                 <Link href="/calculator">
-                  <a className="px-4 py-3 hover:bg-[#333]/50 text-left rounded-b-md">
+                  <a className="px-4 py-3 hover:bg-foreground/5 text-left rounded-b-md">
                     Tools
                   </a>
                 </Link>
@@ -97,7 +97,7 @@ const Navbar = () => {
 
       {/* Mobile menu */}
       {isOpen && (
-        <div className="md:hidden absolute top-full left-0 w-full bg-[#1E1E1E]/95 backdrop-blur-md border-b border-white/10 shadow-lg animate-fade-in z-40">
+        <div className="md:hidden absolute top-full left-0 w-full glass-card shadow-lg animate-fade-in z-40">
           <div className="flex flex-col p-4 space-y-4">
             <MobileNavLink href="/" active={location === "/"} onClick={() => setIsOpen(false)}>
               Home
@@ -118,7 +118,7 @@ const Navbar = () => {
               Tutorials
             </MobileNavLink>
             
-            <div className="pt-4 flex gap-4 border-t border-white/10">
+            <div className="pt-4 flex gap-4 border-t border-border/30">
               <Button className="flex-1" variant="outline" size="default" asChild>
                 <Link href="/signup">Sign Up</Link>
               </Button>
@@ -142,9 +142,9 @@ interface NavLinkProps {
 const NavLink = ({ href, active, children }: NavLinkProps) => {
   return (
     <Link href={href}>
-      <a className={`relative text-lg font-medium group ${active ? 'text-yellow-400' : 'hover:text-yellow-400'} transition-colors duration-300`}>
+      <a className={`relative text-lg font-medium group ${active ? 'text-primary' : 'hover:text-primary'} transition-colors duration-300`}>
         {children}
-        <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-yellow-400 transition-transform duration-300 origin-left ${active ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`}></span>
+        <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-primary transition-transform duration-300 origin-left ${active ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`}></span>
       </a>
     </Link>
   );
@@ -160,8 +160,8 @@ const MobileNavLink = ({ href, active, children, onClick }: MobileNavLinkProps) 
       <a 
         className={`text-lg font-medium py-2 px-4 rounded-lg ${
           active 
-            ? 'bg-yellow-400/20 text-yellow-400' 
-            : 'hover:bg-white/5'
+            ? 'bg-primary/20 text-primary' 
+            : 'hover:bg-foreground/5'
         } transition-colors duration-200`}
         onClick={onClick}
       >

@@ -38,8 +38,8 @@ const ThemeToggle = ({ className = '' }: ThemeToggleProps) => {
       onClick={toggleTheme}
       className={`relative h-9 w-9 rounded-full p-2 ${
         theme === 'light' 
-          ? 'bg-yellow-500/20 text-yellow-500 hover:bg-yellow-500/30' 
-          : 'bg-purple-500/20 text-purple-300 hover:bg-purple-500/30'
+          ? 'bg-primary/20 text-primary hover:bg-primary/30' 
+          : 'bg-primary/20 text-primary hover:bg-primary/30'
       } transition-colors duration-300 ${className}`}
       whileTap={{ scale: 0.95 }}
       aria-label={`Toggle ${theme === 'dark' ? 'light' : 'dark'} mode`}
