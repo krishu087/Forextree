@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Tree, ChevronDown } from "lucide-react";
+import { Menu, X, BookOpen, ChevronDown } from "lucide-react";
 import ThemeToggle from '@/components/ThemeToggle';
 
 const Navbar = () => {
@@ -16,7 +16,7 @@ const Navbar = () => {
           <Link href="/">
             <a className="flex items-center gap-3">
               <div className="bg-gradient-to-br from-yellow-400 to-amber-500 p-2 rounded-full shadow-md transform hover:scale-110 transition-transform duration-300">
-                <Tree className="h-7 w-7 text-black" />
+                <BookOpen className="h-7 w-7 text-black" />
               </div>
               <span className="text-2xl font-bold tracking-tight gradient-text">
                 ForexTree
