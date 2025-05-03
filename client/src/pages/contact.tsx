@@ -63,21 +63,21 @@ export default function Contact() {
                   <div className="w-10 h-10 rounded-full bg-yellow-400/20 flex items-center justify-center mr-4 group-hover:bg-yellow-400/30 transition-colors duration-300">
                     <Mail className="w-5 h-5 text-yellow-400" />
                   </div>
-                  <span className="group-hover:text-yellow-400/80 transition-colors duration-300">support@forextree.com</span>
+                  <span className="group-hover:text-yellow-400/80 transition-colors duration-300">krishnapanjre2003@gmail.com</span>
                 </div>
 
                 <div className="flex items-center text-white/80 group">
                   <div className="w-10 h-10 rounded-full bg-yellow-400/20 flex items-center justify-center mr-4 group-hover:bg-yellow-400/30 transition-colors duration-300">
                     <Phone className="w-5 h-5 text-yellow-400" />
                   </div>
-                  <span className="group-hover:text-yellow-400/80 transition-colors duration-300">+1 (555) 123-4567</span>
+                  <span className="group-hover:text-yellow-400/80 transition-colors duration-300">+91 9893976075</span>
                 </div>
 
                 <div className="flex items-center text-white/80 group">
                   <div className="w-10 h-10 rounded-full bg-yellow-400/20 flex items-center justify-center mr-4 group-hover:bg-yellow-400/30 transition-colors duration-300">
                     <MapPin className="w-5 h-5 text-yellow-400" />
                   </div>
-                  <span className="group-hover:text-yellow-400/80 transition-colors duration-300">123 Trading Street, Financial District, NY 10004</span>
+                  <span className="group-hover:text-yellow-400/80 transition-colors duration-300">22 Malviya Nagar, Indore</span>
                 </div>
               </div>
             </motion.div>
@@ -125,7 +125,7 @@ export default function Contact() {
                   onChange={handleChange}
                   required
                   className="w-full bg-[#1a1625] border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-yellow-400/50 focus:border-yellow-400/50"
-                  placeholder="John Doe"
+                  placeholder="user name"
                 />
               </div>
               
@@ -139,7 +139,7 @@ export default function Contact() {
                   onChange={handleChange}
                   required
                   className="w-full bg-[#1a1625] border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-yellow-400/50 focus:border-yellow-400/50"
-                  placeholder="john@example.com"
+                  placeholder="nnnnnnn@example.com"
                 />
               </div>
               

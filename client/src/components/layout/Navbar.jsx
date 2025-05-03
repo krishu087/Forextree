@@ -1,13 +1,16 @@
 import { useState } from 'react';
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Menu, X, BookOpen, ChevronDown } from "lucide-react";
+import { Menu, X, BookOpen, ChevronDown, User } from "lucide-react";
 import ThemeToggle from '@/components/ThemeToggle';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [location] = useLocation();
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const { user, logout } = useAuth();
 
   return (
     <nav className="theme-nav text-foreground sticky top-0 z-50 shadow-lg px-4 py-2">
@@ -38,6 +41,10 @@ const Navbar = () => {
             Prop Firms
           </NavLink>
           
+          <NavLink href="/blog" active={location === "/blog"}>
+            Blog
+          </NavLink>
+          
           <NavLink href="/contact" active={location === "/contact"}>
             Contact
           </NavLink>
@@ -60,8 +67,13 @@ const Navbar = () => {
                   </div>
                 </Link>
                 <Link href="/calculator">
-                  <div className="px-4 py-3 hover:bg-foreground/5 text-left rounded-b-md cursor-pointer">
+                  <div className="px-4 py-3 hover:bg-foreground/5 text-left cursor-pointer">
                     Tools
+                  </div>
+                </Link>
+                <Link href="/news">
+                  <div className="px-4 py-3 hover:bg-foreground/5 text-left rounded-b-md cursor-pointer">
+                    News
                   </div>
                 </Link>
               </div>
@@ -73,13 +85,48 @@ const Navbar = () => {
           <div className="mr-2">
             <ThemeToggle />
           </div>
-          <Button variant="outline" size="default" asChild>
-            <Link href="/signup">Sign Up</Link>
-          </Button>
           
-          <Button variant="default" size="default">
-            Log In
-          </Button>
+          {user ? (
+            <div className="relative">
+              <button
+                onClick={() => setUserMenuOpen(!userMenuOpen)}
+                className="flex items-center justify-center p-2 rounded-full hover:bg-foreground/5 transition-colors duration-200"
+              >
+                <User className="h-6 w-6" />
+              </button>
+              
+              {userMenuOpen && (
+                <div className="absolute right-0 mt-2 w-48 glass-card rounded-md shadow-lg z-50 animate-fade-in">
+                  <div className="py-1">
+                    <Link href="/profile">
+                      <div className="px-4 py-2 hover:bg-foreground/5 cursor-pointer">
+                        Profile
+                      </div>
+                    </Link>
+                    <button
+                      onClick={() => {
+                        logout();
+                        setUserMenuOpen(false);
+                      }}
+                      className="w-full text-left px-4 py-2 hover:bg-foreground/5 text-red-500 cursor-pointer"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : (
+            <>
+              <Button variant="outline" size="default" asChild>
+                <Link href="/signup">Sign Up</Link>
+              </Button>
+              
+              <Button variant="default" size="default" asChild>
+                <Link href="/login">Log In</Link>
+              </Button>
+            </>
+          )}
         </div>
         
         <button 
@@ -108,6 +155,9 @@ const Navbar = () => {
             <MobileNavLink href="/comparison" active={location === "/comparison"} onClick={() => setIsOpen(false)}>
               Prop Firms
             </MobileNavLink>
+            <MobileNavLink href="/blog" active={location === "/blog"} onClick={() => setIsOpen(false)}>
+              Blog
+            </MobileNavLink>
             <MobileNavLink href="/contact" active={location === "/contact"} onClick={() => setIsOpen(false)}>
               Contact
             </MobileNavLink>
@@ -117,15 +167,35 @@ const Navbar = () => {
             <MobileNavLink href="/tutorials" active={location === "/tutorials"} onClick={() => setIsOpen(false)}>
               Tutorials
             </MobileNavLink>
+            <MobileNavLink href="/news" active={location === "/news"} onClick={() => setIsOpen(false)}>
+              News
+            </MobileNavLink>
             
-            <div className="pt-4 flex gap-4 border-t border-border/30">
-              <Button className="flex-1" variant="outline" size="default" asChild>
-                <Link href="/signup">Sign Up</Link>
-              </Button>
-              <Button className="flex-1" variant="default" size="default">
-                Log In
-              </Button>
-            </div>
+            {user ? (
+              <>
+                <MobileNavLink href="/profile" onClick={() => setIsOpen(false)}>
+                  Profile
+                </MobileNavLink>
+                <button
+                  onClick={() => {
+                    logout();
+                    setIsOpen(false);
+                  }}
+                  className="text-red-500 text-lg font-medium py-2 px-4 rounded-lg hover:bg-foreground/5 transition-colors duration-200"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <div className="pt-4 flex gap-4 border-t border-border/30">
+                <Button className="flex-1" variant="outline" size="default" asChild>
+                  <Link href="/signup">Sign Up</Link>
+                </Button>
+                <Button className="flex-1" variant="default" size="default" asChild>
+                  <Link href="/login">Log In</Link>
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       )}

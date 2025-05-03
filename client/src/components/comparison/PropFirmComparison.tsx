@@ -60,6 +60,150 @@ const PropFirmComparison = () => {
       trustRating: 4.4,
       country: 'United Kingdom',
       established: 'November'
+    },
+    {
+      id: 3,
+      name: 'FTMO',
+      logo: 'FT',
+      price: { original: 625.00, discounted: 550.00 },
+      accountSize: { amount: '100K', steps: '2 steps' },
+      profitSplit: '80%',
+      profitTarget: { first: '10%', second: '5%' },
+      maxDailyLoss: '5%',
+      maxTotalDrawdown: '10%',
+      drawdownReset: 'Balance-based',
+      commission: '$4/lot',
+      profitDrawdownRatio: 1.0,
+      payout: 'Monthly',
+      trustRating: 4.7,
+      country: 'Czech Republic',
+      established: '2014'
+    },
+    {
+      id: 4,
+      name: 'MyForexFunds',
+      logo: 'MF',
+      price: { original: 449.00, discounted: 399.00 },
+      accountSize: { amount: '100K', steps: '2 steps' },
+      profitSplit: '85%',
+      profitTarget: { first: '8%', second: '5%' },
+      maxDailyLoss: '5%',
+      maxTotalDrawdown: '12%',
+      drawdownReset: 'Balance-based',
+      commission: '$0',
+      profitDrawdownRatio: 0.67,
+      payout: 'Bi-weekly',
+      trustRating: 4.5,
+      country: 'United States',
+      established: '2020'
+    },
+    {
+      id: 5,
+      name: 'True Forex Funds',
+      logo: 'TF',
+      price: { original: 499.00, discounted: 449.00 },
+      accountSize: { amount: '100K', steps: '1 step' },
+      profitSplit: '75%',
+      profitTarget: { first: '10%', second: '0%' },
+      maxDailyLoss: '4%',
+      maxTotalDrawdown: '8%',
+      drawdownReset: 'Equity-based',
+      commission: '$2/lot',
+      profitDrawdownRatio: 1.25,
+      payout: 'Weekly',
+      trustRating: 4.2,
+      country: 'United Kingdom',
+      established: '2021'
+    },
+    {
+      id: 6,
+      name: 'The Funded Trader',
+      logo: 'TFT',
+      price: { original: 599.00, discounted: 539.00 },
+      accountSize: { amount: '100K', steps: '2 steps' },
+      profitSplit: '80%',
+      profitTarget: { first: '8%', second: '4%' },
+      maxDailyLoss: '5%',
+      maxTotalDrawdown: '10%',
+      drawdownReset: 'Balance-based',
+      commission: '$3/lot',
+      profitDrawdownRatio: 0.8,
+      payout: 'Daily',
+      trustRating: 4.6,
+      country: 'Australia',
+      established: '2019'
+    },
+    {
+      id: 7,
+      name: 'Funding Pips',
+      logo: 'FP',
+      price: { original: 549.00, discounted: 499.00 },
+      accountSize: { amount: '100K', steps: '1 step' },
+      profitSplit: '90%',
+      profitTarget: { first: '12%', second: '0%' },
+      maxDailyLoss: '6%',
+      maxTotalDrawdown: '12%',
+      drawdownReset: 'Equity-based',
+      commission: '$1/lot',
+      profitDrawdownRatio: 1.0,
+      payout: 'Same Day',
+      trustRating: 4.3,
+      country: 'UAE',
+      established: '2022'
+    },
+    {
+      id: 8,
+      name: 'Blue Capital FX',
+      logo: 'BC',
+      price: { original: 475.00, discounted: 427.50 },
+      accountSize: { amount: '100K', steps: '2 steps' },
+      profitSplit: '85%',
+      profitTarget: { first: '7%', second: '4%' },
+      maxDailyLoss: '5%',
+      maxTotalDrawdown: '9%',
+      drawdownReset: 'Balance-based',
+      commission: '$0',
+      profitDrawdownRatio: 0.78,
+      payout: 'Weekly',
+      trustRating: 4.1,
+      country: 'Singapore',
+      established: '2021'
+    },
+    {
+      id: 9,
+      name: 'PropFirm Pro',
+      logo: 'PP',
+      price: { original: 599.00, discounted: 479.20 },
+      accountSize: { amount: '100K', steps: '2 steps' },
+      profitSplit: '75%',
+      profitTarget: { first: '6%', second: '3%' },
+      maxDailyLoss: '3%',
+      maxTotalDrawdown: '6%',
+      drawdownReset: 'Balance / Equity - Highest at EOD',
+      commission: '$0',
+      profitDrawdownRatio: 1.0,
+      payout: '48 Hours',
+      trustRating: 4.4,
+      country: 'Canada',
+      established: '2020'
+    },
+    {
+      id: 10,
+      name: 'Elite Trader Funding',
+      logo: 'ET',
+      price: { original: 650.00, discounted: 585.00 },
+      accountSize: { amount: '100K', steps: '3 steps' },
+      profitSplit: '90%',
+      profitTarget: { first: '5%', second: '3%' },
+      maxDailyLoss: '4%',
+      maxTotalDrawdown: '8%',
+      drawdownReset: 'Equity-based',
+      commission: '$2.5/lot',
+      profitDrawdownRatio: 0.625,
+      payout: 'Monthly',
+      trustRating: 4.8,
+      country: 'Switzerland',
+      established: '2018'
     }
   ];
 
@@ -109,52 +253,50 @@ const PropFirmComparison = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-800/30">
-              {filteredFirms.length > 0 ? (
-                filteredFirms.map((firm, index) => (
-                  <tr
-                    key={firm.id}
-                    className="border-b border-gray-700/50 hover:bg-white/5 transition-all"
-                    style={{ animationDelay: `${index * 100}ms` }}
-                  >
-                    <td className="px-6 py-4">
-                      <div className="flex items-center">
-                        <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-amber-500 rounded-lg flex items-center justify-center text-black font-bold mr-4">
-                          {firm.logo}
-                        </div>
-                        <span className="text-sm font-medium">{firm.name}</span>
+              {filteredFirms.map((firm, index) => (
+                <tr
+                  key={firm.id}
+                  className="hover:bg-white/5 transition-all"
+                >
+                  <td className="px-6 py-4">
+                    <div className="flex items-center">
+                      <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-amber-500 rounded-lg flex items-center justify-center text-black font-bold mr-4">
+                        {firm.logo}
                       </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="line-through text-gray-400 text-sm">${firm.price.original.toFixed(2)}</div>
-                      <div className="text-yellow-400 font-semibold">${firm.price.discounted.toFixed(2)}</div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="text-sm">{firm.accountSize.amount}</div>
-                      <div className="text-xs text-gray-400">{firm.accountSize.steps}</div>
-                    </td>
-                    <td className="px-6 py-4 text-sm">{firm.profitSplit}</td>
-                    <td className="px-6 py-4">
-                      <div className="text-sm">1: {firm.profitTarget.first}</div>
-                      <div className="text-sm">2: {firm.profitTarget.second}</div>
-                    </td>
-                    <td className="px-6 py-4 text-sm">{firm.maxDailyLoss}</td>
-                    <td className="px-6 py-4 text-sm">{firm.maxTotalDrawdown}</td>
-                    <td className="px-6 py-4 text-sm">{firm.drawdownReset}</td>
-                    <td className="px-6 py-4 text-sm">{firm.commission}</td>
-                    <td className="px-6 py-4 text-sm">{firm.payout}</td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center">
-                        <Star className="w-4 h-4 text-yellow-400 mr-1" fill="currentColor" />
-                        <span className="text-sm">{firm.trustRating}</span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="text-sm">{firm.established}</div>
-                      <div className="text-xs text-gray-400">{firm.country}</div>
-                    </td>
-                  </tr>
-                ))
-              ) : (
+                      <span className="text-sm font-medium">{firm.name}</span>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4">
+                    <div className="line-through text-gray-400 text-sm">${firm.price.original.toFixed(2)}</div>
+                    <div className="text-yellow-400 font-semibold">${firm.price.discounted.toFixed(2)}</div>
+                  </td>
+                  <td className="px-6 py-4">
+                    <div className="text-sm">{firm.accountSize.amount}</div>
+                    <div className="text-xs text-gray-400">{firm.accountSize.steps}</div>
+                  </td>
+                  <td className="px-6 py-4 text-sm">{firm.profitSplit}</td>
+                  <td className="px-6 py-4">
+                    <div className="text-sm">1: {firm.profitTarget.first}</div>
+                    <div className="text-sm">2: {firm.profitTarget.second}</div>
+                  </td>
+                  <td className="px-6 py-4 text-sm">{firm.maxDailyLoss}</td>
+                  <td className="px-6 py-4 text-sm">{firm.maxTotalDrawdown}</td>
+                  <td className="px-6 py-4 text-sm">{firm.drawdownReset}</td>
+                  <td className="px-6 py-4 text-sm">{firm.commission}</td>
+                  <td className="px-6 py-4 text-sm">{firm.payout}</td>
+                  <td className="px-6 py-4">
+                    <div className="flex items-center">
+                      <Star className="w-4 h-4 text-yellow-400 mr-1" fill="currentColor" />
+                      <span className="text-sm">{firm.trustRating}</span>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4">
+                    <div className="text-sm">{firm.established}</div>
+                    <div className="text-xs text-gray-400">{firm.country}</div>
+                  </td>
+                </tr>
+              ))}
+              {filteredFirms.length === 0 && (
                 <tr>
                   <td colSpan={12} className="px-6 py-4 text-center text-gray-400">
                     No firms found matching your search.
