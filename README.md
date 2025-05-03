@@ -3,7 +3,7 @@
 A full-stack trading platform built with React, Express, and MongoDB, featuring real-time data updates and modern UI components.
 
 
-![Project Logo](img_01.png)
+![Project Logo](ioc.png)
 =======
 ![Project Logo](forextree.png)
 
