@@ -3,7 +3,7 @@
 A full-stack trading platform built with React, Express, and MongoDB, featuring real-time data updates and modern UI components.
 
 
-![Project Logo](generated-icon.png)
+![Project Logo](V.png.png)
 =======
 ![Project Logo](forextree.png)
 
@@ -141,8 +141,5 @@ For any questions or concerns, please open an issue in the repository.
 
 ---
 
-<<<<<<< HEAD
-Built with ❤️ by [Your Name]
+Built with ❤️ Krishna Panjre
 =======
-Built with ❤️ by [Your Name] 
->>>>>>> 0532754 (Update README with images)
