@@ -139,6 +139,47 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 For any questions or concerns, please open an issue in the repository.
 
+## 🚀 Deployment
+
+### Deploying to Vercel
+
+1. **Install Vercel CLI**
+   ```bash
+   npm install -g vercel
+   ```
+
+2. **Login to Vercel**
+   ```bash
+   vercel login
+   ```
+
+3. **Set up environment variables in Vercel**
+   - Go to your project settings in Vercel dashboard
+   - Add the following environment variables:
+     ```
+     MONGODB_URI=your_mongodb_uri
+     JWT_SECRET=your_jwt_secret
+     NODE_ENV=production
+     ```
+
+4. **Deploy the project**
+   ```bash
+   vercel
+   ```
+
+5. **For subsequent deployments**
+   ```bash
+   vercel --prod
+   ```
+
+### Important Notes for Deployment
+
+- Make sure your MongoDB database is accessible from Vercel's servers
+- Consider using MongoDB Atlas for cloud-hosted database
+- Update your frontend API calls to use the production URL
+- Set up proper CORS configuration in your backend
+- Configure proper security headers
+
 ---
 
 Built with ❤️ Krishna Panjre

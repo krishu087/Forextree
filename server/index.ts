@@ -27,7 +27,9 @@ const io = new Server(httpServer, {
 
 // Middleware
 app.use(cors({
-  origin: 'http://localhost:5000',
+  origin: process.env.NODE_ENV === 'production' 
+    ? ['https://your-vercel-domain.vercel.app'] 
+    : 'http://localhost:5000',
   credentials: true
 }));
 app.use(express.json());
