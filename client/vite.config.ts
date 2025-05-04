@@ -4,16 +4,30 @@ import path from 'path';
 
 export default defineConfig({
   plugins: [react()],
-  build: {
-    outDir: 'dist',
-    emptyOutDir: true,
-  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
     },
   },
   server: {
-    port: 5000,
+    proxy: {
+      '/api': {
+        target: process.env.VITE_API_URL || 'http://localhost:5001',
+        changeOrigin: true,
+        secure: false,
+      },
+    },
+  },
+  build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
+    sourcemap: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+        },
+      },
+    },
   },
 }); 
