@@ -43,11 +43,9 @@ const Hero = ({
               style={{ animationDelay: '200ms' }}
             >
               <Button variant="glow" size="lg" asChild>
-                <Link href={ctaLink}>
-                  <a className="flex items-center gap-2">
-                    {ctaText}
-                    <ArrowRight className="h-5 w-5" />
-                  </a>
+                <Link href={ctaLink} className="flex items-center gap-2">
+                  {ctaText}
+                  <ArrowRight className="h-5 w-5" />
                 </Link>
               </Button>
               <Button variant="secondary" size="lg">

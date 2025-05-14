@@ -1,173 +1,198 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Menu, X, BookOpen, ChevronDown } from "lucide-react";
+import { Menu, X, User, LogOut } from "lucide-react";
 import ThemeToggle from '@/components/ThemeToggle';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [location] = useLocation();
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [location, setLocation] = useLocation();
+  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
+  const { user, logout } = useAuth();
+
+  // Debug log when user state changes
+  useEffect(() => {
+    console.log('Navbar - User state changed:', user);
+  }, [user]);
+
+  const handleLogin = () => {
+    console.log('Login button clicked, navigating to /login');
+    setLocation('/login');
+  };
+
+  const handleLogout = async () => {
+    try {
+      console.log('Attempting logout from Navbar');
+      await logout();
+      setLocation('/');
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
 
   return (
-    <nav className="theme-nav text-foreground sticky top-0 z-50 shadow-lg px-4 py-2">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex items-center justify-between rounded-xl backdrop-blur-sm glass-card">
+    <nav className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container flex h-14 max-w-screen-2xl items-center">
         <div className="flex items-center gap-3">
           <Link href="/">
-            <a className="flex items-center gap-3">
-              <div className="bg-gradient-to-br from-yellow-400 to-amber-500 p-2 rounded-full shadow-md transform hover:scale-110 transition-transform duration-300">
-                <BookOpen className="h-7 w-7 text-black" />
-              </div>
-              <span className="text-2xl font-bold tracking-tight gradient-text">
-                ForexTree
-              </span>
-            </a>
+            <div className="flex items-center gap-3 cursor-pointer">
+              <img src="/logo.svg" alt="PortfolioPro Logo" className="h-8 w-auto" />
+            </div>
           </Link>
         </div>
 
-        <div className="hidden md:flex items-center gap-8">
-          <NavLink href="/" active={location === "/"}>
-            Home
-          </NavLink>
-          
-          <NavLink href="/about" active={location === "/about"}>
-            About
-          </NavLink>
-          
-          <NavLink href="/comparison" active={location === "/comparison"}>
-            Prop Firms
-          </NavLink>
-          
-          <NavLink href="/contact" active={location === "/contact"}>
-            Contact
-          </NavLink>
-          
-          <div className="relative group">
-            <button 
-              className={`text-lg font-medium group flex items-center gap-1 ${
-                dropdownOpen ? 'text-primary' : 'hover:text-primary'
-              } transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-primary/50 rounded-md px-2 py-1`}
-              onClick={() => setDropdownOpen(!dropdownOpen)}
-            >
-              Resources
-              <ChevronDown className={`h-4 w-4 transition-transform duration-300 ${dropdownOpen ? 'rotate-180' : ''}`} />
-            </button>
-            {dropdownOpen && (
-              <div className="absolute top-full left-0 flex flex-col glass-card text-foreground rounded-md shadow-lg w-48 z-50 animate-fade-in">
-                <Link href="/tutorials">
-                  <a className="px-4 py-3 hover:bg-foreground/5 text-left rounded-t-md">
-                    Tutorials
-                  </a>
-                </Link>
-                <Link href="/calculator">
-                  <a className="px-4 py-3 hover:bg-foreground/5 text-left rounded-b-md">
-                    Tools
-                  </a>
-                </Link>
+        <div className="flex flex-1 items-center justify-end space-x-4">
+          <div className="hidden md:flex items-center space-x-4">
+            <Link href="/">
+              <Button variant="ghost" className="text-sm font-medium">
+                Home
+              </Button>
+            </Link>
+            <Link href="/comparison">
+              <Button variant="ghost" className="text-sm font-medium">
+                Comparison
+              </Button>
+            </Link>
+            <Link href="/blog">
+              <Button variant="ghost" className="text-sm font-medium">
+                Blog
+              </Button>
+            </Link>
+            <Link href="/tutorials">
+              <Button variant="ghost" className="text-sm font-medium">
+                Tutorials
+              </Button>
+            </Link>
+            <Link href="/calculator">
+              <Button variant="ghost" className="text-sm font-medium">
+                Calculator
+              </Button>
+            </Link>
+            <Link href="/news">
+              <Button variant="ghost" className="text-sm font-medium">
+                News
+              </Button>
+            </Link>
+            <Link href="/financial-news">
+              <Button variant="ghost" className="text-sm font-medium">
+                Financial Calendar
+              </Button>
+            </Link>
+            <Link href="/about">
+              <Button variant="ghost" className="text-sm font-medium">
+                About
+              </Button>
+            </Link>
+            <Link href="/contact">
+              <Button variant="ghost" className="text-sm font-medium">
+                Contact
+              </Button>
+            </Link>
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <ThemeToggle />
+            {user ? (
+              <div className="relative">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setUserDropdownOpen(!userDropdownOpen)}
+                >
+                  <User className="h-5 w-5" />
+                </Button>
+                {userDropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-background border border-border">
+                    <div className="py-1">
+                      <Link href="/profile">
+                        <div className="block px-4 py-2 text-sm hover:bg-accent cursor-pointer">
+                          Profile
+                        </div>
+                      </Link>
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-start px-4 py-2 text-sm hover:bg-accent"
+                        onClick={handleLogout}
+                      >
+                        <LogOut className="mr-2 h-4 w-4" />
+                        Logout
+                      </Button>
+                    </div>
+                  </div>
+                )}
               </div>
+            ) : (
+              <Button variant="default" onClick={handleLogin}>
+                Login
+              </Button>
             )}
           </div>
-        </div>
 
-        <div className="hidden md:flex items-center gap-3">
-          <div className="mr-2">
-            <ThemeToggle />
-          </div>
-          <Button variant="outline" size="default" asChild>
-            <Link href="/signup">Sign Up</Link>
-          </Button>
-          
-          <Button variant="default" size="default">
-            Log In
+          <Button
+            variant="ghost"
+            size="icon"
+            className="md:hidden"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </Button>
         </div>
-        
-        <button 
-          onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden p-2 rounded-full hover:bg-[#333]/30 transition-colors duration-200"
-          aria-label="Toggle Menu"
-        >
-          {isOpen ? (
-            <X className="h-6 w-6" />
-          ) : (
-            <Menu className="h-6 w-6" />
-          )}
-        </button>
       </div>
 
       {/* Mobile menu */}
       {isOpen && (
-        <div className="md:hidden absolute top-full left-0 w-full glass-card shadow-lg animate-fade-in z-40">
-          <div className="flex flex-col p-4 space-y-4">
-            <MobileNavLink href="/" active={location === "/"} onClick={() => setIsOpen(false)}>
-              Home
-            </MobileNavLink>
-            <MobileNavLink href="/about" active={location === "/about"} onClick={() => setIsOpen(false)}>
-              About
-            </MobileNavLink>
-            <MobileNavLink href="/comparison" active={location === "/comparison"} onClick={() => setIsOpen(false)}>
-              Prop Firms
-            </MobileNavLink>
-            <MobileNavLink href="/contact" active={location === "/contact"} onClick={() => setIsOpen(false)}>
-              Contact
-            </MobileNavLink>
-            <MobileNavLink href="/calculator" active={location === "/calculator"} onClick={() => setIsOpen(false)}>
-              Tools
-            </MobileNavLink>
-            <MobileNavLink href="/tutorials" active={location === "/tutorials"} onClick={() => setIsOpen(false)}>
-              Tutorials
-            </MobileNavLink>
-            
-            <div className="pt-4 flex gap-4 border-t border-border/30">
-              <Button className="flex-1" variant="outline" size="default" asChild>
-                <Link href="/signup">Sign Up</Link>
+        <div className="md:hidden">
+          <div className="px-2 pt-2 pb-3 space-y-1">
+            <Link href="/">
+              <Button variant="ghost" className="w-full justify-start">
+                Home
               </Button>
-              <Button className="flex-1" variant="default" size="default">
-                Log In
+            </Link>
+            <Link href="/comparison">
+              <Button variant="ghost" className="w-full justify-start">
+                Comparison
               </Button>
-            </div>
+            </Link>
+            <Link href="/blog">
+              <Button variant="ghost" className="w-full justify-start">
+                Blog
+              </Button>
+            </Link>
+            <Link href="/tutorials">
+              <Button variant="ghost" className="w-full justify-start">
+                Tutorials
+              </Button>
+            </Link>
+            <Link href="/calculator">
+              <Button variant="ghost" className="w-full justify-start">
+                Calculator
+              </Button>
+            </Link>
+            <Link href="/news">
+              <Button variant="ghost" className="w-full justify-start">
+                News
+              </Button>
+            </Link>
+            <Link href="/financial-news">
+              <Button variant="ghost" className="w-full justify-start">
+                Financial Calendar
+              </Button>
+            </Link>
+            <Link href="/about">
+              <Button variant="ghost" className="w-full justify-start">
+                About
+              </Button>
+            </Link>
+            <Link href="/contact">
+              <Button variant="ghost" className="w-full justify-start">
+                Contact
+              </Button>
+            </Link>
           </div>
         </div>
       )}
     </nav>
-  );
-};
-
-interface NavLinkProps {
-  href: string;
-  active: boolean;
-  children: React.ReactNode;
-}
-
-const NavLink = ({ href, active, children }: NavLinkProps) => {
-  return (
-    <Link href={href}>
-      <a className={`relative text-lg font-medium group ${active ? 'text-primary' : 'hover:text-primary'} transition-colors duration-300`}>
-        {children}
-        <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-primary transition-transform duration-300 origin-left ${active ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`}></span>
-      </a>
-    </Link>
-  );
-};
-
-interface MobileNavLinkProps extends NavLinkProps {
-  onClick: () => void;
-}
-
-const MobileNavLink = ({ href, active, children, onClick }: MobileNavLinkProps) => {
-  return (
-    <Link href={href}>
-      <a 
-        className={`text-lg font-medium py-2 px-4 rounded-lg ${
-          active 
-            ? 'bg-primary/20 text-primary' 
-            : 'hover:bg-foreground/5'
-        } transition-colors duration-200`}
-        onClick={onClick}
-      >
-        {children}
-      </a>
-    </Link>
   );
 };
 

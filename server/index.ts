@@ -1,11 +1,64 @@
 import express, { type Request, Response, NextFunction } from "express";
+import { createServer } from "http";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import connectDB from './config/db';
+import authRoutes from './routes/auth';
+import blogRoutes from './routes/blog';
+import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+import { Server } from 'socket.io';
+import { setupWebSocket } from './websocket';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const app = express();
+const httpServer = createServer(app);
+const io = new Server(httpServer, {
+  cors: {
+    origin: ['http://localhost:5173', 'http://localhost:5000'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true
+  }
+});
+
+// Middleware
+app.use(cors({
+  origin: ['http://localhost:5173', 'http://localhost:5000'],
+  credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+// Connect to MongoDB
+connectDB().then(() => {
+  log('MongoDB connected successfully');
+}).catch((error) => {
+  log('MongoDB connection error:', error);
+  process.exit(1);
+});
+
+// Authentication routes with error handling
+app.use('/api/auth', (req, res, next) => {
+  log(`Auth request: ${req.method} ${req.path}`);
+  next();
+}, authRoutes);
+
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+// Blog routes
+app.use('/api/blogs', (req, res, next) => {
+  log(`Blog request: ${req.method} ${req.path}`);
+  next();
+}, blogRoutes);
+
+// API request logging middleware
 app.use((req, res, next) => {
   const start = Date.now();
   const path = req.path;
@@ -36,35 +89,44 @@ app.use((req, res, next) => {
   next();
 });
 
-(async () => {
-  const server = await registerRoutes(app);
-
-  app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
-    const status = err.status || err.statusCode || 500;
-    const message = err.message || "Internal Server Error";
-
-    res.status(status).json({ message });
-    throw err;
-  });
-
-  // importantly only setup vite in development and after
-  // setting up all the other routes so the catch-all route
-  // doesn't interfere with the other routes
-  if (app.get("env") === "development") {
-    await setupVite(app, server);
-  } else {
-    serveStatic(app);
+// Error handling middleware
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+  log(`Error: ${err.message}`);
+  
+  if (err.name === 'ValidationError') {
+    return res.status(400).json({
+      message: 'Validation Error',
+      errors: Object.values(err.errors).map((e: any) => e.message)
+    });
   }
-
-  // ALWAYS serve the app on port 5000
-  // this serves both the API and the client.
-  // It is the only port that is not firewalled.
-  const port = 5000;
-  server.listen({
-    port,
-    host: "0.0.0.0",
-    reusePort: true,
-  }, () => {
-    log(`serving on port ${port}`);
+  
+  if (err.name === 'MongoError' && err.code === 11000) {
+    return res.status(400).json({
+      message: 'Duplicate key error',
+      error: err.message
+    });
+  }
+  
+  res.status(err.status || 500).json({
+    message: err.message || 'Internal Server Error'
   });
-})();
+});
+
+// Serve static files from the React app in production only
+if (process.env.NODE_ENV === 'production') {
+  const publicPath = path.join(__dirname, '../dist/public');
+  app.use(express.static(publicPath));
+
+  // Handle client-side routing - this should be the last route
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(publicPath, 'index.html'));
+  });
+}
+
+// WebSocket setup
+setupWebSocket(io);
+
+const PORT = process.env.PORT || 5001;
+httpServer.listen(PORT, () => {
+  log(`Server running on port ${PORT}`);
+});
