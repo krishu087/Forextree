@@ -7,114 +7,140 @@ import mongoose from 'mongoose';
 export const getBlogs = async (req: Request, res: Response) => {
   try {
     const blogs = await Blog.find()
-      .sort({ createdAt: -1 })
-      .populate('userId', 'name email')
-      .lean();
-
-    // Format the blogs to match the frontend interface
-    const formattedBlogs = blogs.map(blog => ({
-      _id: blog._id,
-      title: blog.title,
-      content: blog.content,
-      author: {
-        _id: blog.userId._id,
-        name: blog.userId.name,
-        email: blog.userId.email
-      },
-      date: blog.createdAt,
-      likes: 0, // You can add likes functionality later
-      comments: 0, // You can add comments functionality later
-      category: blog.category,
-      readTime: blog.readTime,
-      isFeatured: false // You can add featured functionality later
-    }));
-
-    res.json(formattedBlogs);
+      .populate('author', 'name email')
+      .sort({ createdAt: -1 });
+    res.json(blogs);
   } catch (error) {
     console.error('Error fetching blogs:', error);
-    res.status(500).json({ message: 'Error fetching blogs', error });
+    res.status(500).json({ message: 'Error fetching blogs' });
   }
 };
 
 // Get a single blog post by ID
 export const getBlogById = async (req: Request, res: Response) => {
   try {
-    const blog = await Blog.findById(req.params.id);
+    const blog = await Blog.findById(req.params.id)
+      .populate('author', 'name email');
+    
     if (!blog) {
       return res.status(404).json({ message: 'Blog not found' });
     }
+    
     res.json(blog);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching blog', error });
+    console.error('Error fetching blog:', error);
+    res.status(500).json({ message: 'Error fetching blog' });
   }
 };
 
 // Create a new blog post
 export const createBlog = async (req: Request, res: Response) => {
   try {
-    const { title, content, category, readTime, userId } = req.body;
-    
-    // Validate userId is a valid ObjectId
-    if (!mongoose.Types.ObjectId.isValid(userId)) {
-      return res.status(400).json({ message: 'Invalid user ID format' });
+    console.log('Create blog request received:', {
+      body: req.body,
+      user: req.user,
+      headers: req.headers
+    });
+
+    const { title, content, category, tags } = req.body;
+
+    // Validate user
+    if (!req.user || !req.user._id) {
+      console.error('No user found in request');
+      return res.status(401).json({ message: 'User not authenticated' });
     }
 
-    // Check if user exists
-    const user = await User.findById(userId);
+    // Get user from database to ensure it exists
+    const user = await User.findById(req.user._id);
     if (!user) {
+      console.error('User not found in database:', req.user._id);
       return res.status(404).json({ message: 'User not found' });
     }
 
+    console.log('Creating blog with user:', {
+      userId: user._id,
+      userName: user.name
+    });
+
+    // Create new blog
     const blog = new Blog({
       title,
       content,
+      author: user._id,
       category,
-      readTime,
-      userId: new mongoose.Types.ObjectId(userId)
+      tags: tags || []
     });
 
+    // Save blog
     const savedBlog = await blog.save();
-    
-    // Populate the user data before sending response
-    const populatedBlog = await Blog.findById(savedBlog._id)
-      .populate('userId', 'name email')
-      .lean();
+    console.log('Blog saved successfully:', {
+      blogId: savedBlog._id,
+      title: savedBlog.title
+    });
 
-    res.status(201).json(populatedBlog);
+    // Update user's blogs array
+    user.blogs.push(savedBlog._id);
+    await user.save();
+    console.log('User updated with new blog');
+
+    res.status(201).json(savedBlog);
   } catch (error) {
     console.error('Error creating blog:', error);
-    res.status(500).json({ message: 'Error creating blog', error });
+    res.status(500).json({
+      message: 'Error creating blog',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    });
   }
 };
 
 // Update a blog post
 export const updateBlog = async (req: Request, res: Response) => {
   try {
-    const { title, content, category, readTime } = req.body;
-    const blog = await Blog.findByIdAndUpdate(
-      req.params.id,
-      { title, content, category, readTime },
-      { new: true }
-    );
+    const { title, content, category, tags } = req.body;
+    const blog = await Blog.findById(req.params.id);
+
     if (!blog) {
       return res.status(404).json({ message: 'Blog not found' });
     }
-    res.json(blog);
+
+    // Check if user is the author
+    if (blog.author.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: 'Not authorized to update this blog' });
+    }
+
+    blog.title = title || blog.title;
+    blog.content = content || blog.content;
+    blog.category = category || blog.category;
+    blog.tags = tags || blog.tags;
+
+    const updatedBlog = await blog.save();
+    res.json(updatedBlog);
   } catch (error) {
-    res.status(500).json({ message: 'Error updating blog', error });
+    console.error('Error updating blog:', error);
+    res.status(500).json({ message: 'Error updating blog' });
   }
 };
 
 // Delete a blog post
 export const deleteBlog = async (req: Request, res: Response) => {
   try {
-    const blog = await Blog.findByIdAndDelete(req.params.id);
+    const blog = await Blog.findById(req.params.id);
+
     if (!blog) {
       return res.status(404).json({ message: 'Blog not found' });
     }
+
+    // Check if user is the author
+    if (blog.author.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: 'Not authorized to delete this blog' });
+    }
+
+    await blog.deleteOne();
     res.json({ message: 'Blog deleted successfully' });
   } catch (error) {
-    res.status(500).json({ message: 'Error deleting blog', error });
+    console.error('Error deleting blog:', error);
+    res.status(500).json({ message: 'Error deleting blog' });
   }
 };
 

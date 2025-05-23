@@ -99,10 +99,24 @@ const BlogEditor = ({ initialData, mode }: BlogEditorProps) => {
     setLoading(true);
     try {
       if (mode === 'create') {
-        const response = await api.post('/blogs', {
+        // Log the user object to check its structure
+        console.log('Current user object:', user);
+        
+        if (!user || !user._id) {
+          throw new Error('User ID is missing. Please log in again.');
+        }
+
+        const blogData = {
           ...formData,
-          userId: user.id
-        });
+          userId: user._id
+        };
+        
+        console.log('Creating blog with data:', blogData);
+        
+        const response = await api.post('/blogs', blogData);
+        
+        console.log('Blog creation response:', response.data);
+        
         toast({
           title: 'Success',
           description: 'Blog post created successfully!'
@@ -118,9 +132,15 @@ const BlogEditor = ({ initialData, mode }: BlogEditorProps) => {
       }
     } catch (error: any) {
       console.error('Blog operation failed:', error);
+      const errorMessage = error.response?.data?.message || 'Failed to save blog post. Please try again.';
+      console.error('Error details:', {
+        message: errorMessage,
+        response: error.response?.data,
+        user: user
+      });
       toast({
         title: 'Error',
-        description: error.response?.data?.message || 'Failed to save blog post. Please try again.',
+        description: errorMessage,
         variant: 'destructive'
       });
     } finally {

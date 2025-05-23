@@ -3,11 +3,11 @@ import { useToast } from '@/components/ui/use-toast';
 
 // Create axios instance with default config
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
+  baseURL: '/api',  // Use relative path to work with Vite proxy
   headers: {
     'Content-Type': 'application/json',
   },
-  withCredentials: true, // Important for handling cookies/auth
+  withCredentials: true,
 });
 
 // Request interceptor
@@ -21,6 +21,7 @@ api.interceptors.request.use(
     return config;
   },
   (error) => {
+    console.error('Request error:', error);
     return Promise.reject(error);
   }
 );
@@ -37,6 +38,7 @@ api.interceptors.response.use(
         case 401:
           // Unauthorized - clear token and redirect to login
           localStorage.removeItem('token');
+          localStorage.removeItem('user');
           window.location.href = '/login';
           break;
         case 403:

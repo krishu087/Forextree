@@ -6,11 +6,6 @@ node_modules/
 # Testing
 coverage/
 
-# Production
-build/
-dist/
-out/
-
 # Environment files
 .env
 .env.local
@@ -46,6 +41,10 @@ next-env.d.ts
 # Misc
 .DS_Store
 *.pem
+
+# Keep build directories
+!client/dist/
+!server/dist/
 
 server/public
 vite.config.ts.*

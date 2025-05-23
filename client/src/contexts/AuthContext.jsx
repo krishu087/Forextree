@@ -1,6 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-
-const API_URL = 'http://localhost:5000'; // Update this with your actual server URL
+import api from '@/lib/axios';
 
 const AuthContext = createContext(null);
 
@@ -10,54 +9,52 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     // Check if user is logged in on mount
-    const storedUser = localStorage.getItem('user');
-    const token = localStorage.getItem('token');
-    
-    if (storedUser && token) {
+    const checkAuth = async () => {
       try {
-        setUser(JSON.parse(storedUser));
+        const token = localStorage.getItem('token');
+        if (token) {
+          const response = await api.get('/auth/me');
+          console.log('Auth check response:', response.data);
+          setUser(response.data);
+        }
       } catch (error) {
-        console.error('Error parsing stored user:', error);
-        localStorage.removeItem('user');
+        console.error('Auth check failed:', error);
         localStorage.removeItem('token');
+        setUser(null);
+      } finally {
+        setLoading(false);
       }
-    }
-    setLoading(false);
+    };
+
+    checkAuth();
   }, []);
 
   const login = async (email, password) => {
     try {
       console.log('Attempting login with:', { email });
       
-      const response = await fetch(`${API_URL}/api/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-        credentials: 'include', // Include cookies in the request
+      const response = await api.post('/auth/login', {
+        email,
+        password
       });
 
-      const data = await response.json();
+      const { token, user: userData } = response.data;
 
-      if (!response.ok) {
-        throw new Error(data.message || 'Login failed. Please check your credentials.');
-      }
-
-      if (!data.token) {
+      if (!token) {
         throw new Error('No token received from server');
       }
 
-      // Store user data and token
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
-      setUser(data.user);
+      // Store token
+      localStorage.setItem('token', token);
       
-      console.log('Login successful');
-      return data;
+      // Set user state
+      setUser(userData);
+      
+      console.log('Login successful, user data:', userData);
+      return response.data;
     } catch (error) {
       console.error('Login error:', error);
-      throw new Error(error.message || 'Login failed. Please try again.');
+      throw new Error(error.response?.data?.message || 'Login failed. Please try again.');
     }
   };
 
@@ -65,42 +62,35 @@ export function AuthProvider({ children }) {
     try {
       console.log('Attempting signup with:', { email, name });
       
-      const response = await fetch(`${API_URL}/api/auth/signup`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ name, email, password }),
-        credentials: 'include', // Include cookies in the request
+      const response = await api.post('/auth/signup', {
+        name,
+        email,
+        password
       });
 
-      const data = await response.json();
+      const { token, user: userData } = response.data;
 
-      if (!response.ok) {
-        throw new Error(data.message || 'Signup failed. Please try again.');
-      }
-
-      if (!data.token) {
+      if (!token) {
         throw new Error('No token received from server');
       }
 
-      // Store user data and token
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
-      setUser(data.user);
+      // Store token
+      localStorage.setItem('token', token);
       
-      console.log('Signup successful');
-      return data;
+      // Set user state
+      setUser(userData);
+      
+      console.log('Signup successful, user data:', userData);
+      return response.data;
     } catch (error) {
       console.error('Signup error:', error);
-      throw new Error(error.message || 'Signup failed. Please try again.');
+      throw new Error(error.response?.data?.message || 'Signup failed. Please try again.');
     }
   };
 
   const logout = () => {
     try {
       localStorage.removeItem('token');
-      localStorage.removeItem('user');
       setUser(null);
       console.log('Logout successful');
     } catch (error) {
